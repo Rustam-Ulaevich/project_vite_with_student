@@ -1,0 +1,49 @@
+body{
+  max-width: 1200px;
+  margin: auto;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-around;
+  background-color: aqua;
+}
+
+.logo {
+  display: flex;
+  background-color: azure;
+  align-items: center;
+}
+.logo img{
+  margin-right: 10px;
+}
+nav ul{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgb(127, 255, 255);
+  list-style: none;
+}
+
+nav ul li {
+  background-color: aqua;
+  margin: 2px;
+  padding: 5px;
+  border: solid 1px red;
+  height: min-content;
+}
+
+.content{
+  max-width: 700px;
+  background-color: beige;
+}
+.track_discription{
+  display: flex;
+  align-items: center;
+  margin-left: 30px;
+}
+
+.track{
+  border:solid 1px rgba(0, 0, 255, 0.562);
+  list-style: none;
+}
