@@ -35,11 +35,15 @@ nav ul li {
 
 .content{
   max-width: 700px;
+  margin: auto;
   background-color: beige;
+  
 }
 .track_discription{
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  max-width: 250px;
   margin-left: 30px;
 }
 
