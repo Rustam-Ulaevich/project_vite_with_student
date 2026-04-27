@@ -1,0 +1,204 @@
+/* 
+селектор {
+  свойство: значение;
+  свойство: значение;
+  свойство: значение;
+} 
+*/
+
+/* class, id */
+/* body {
+  background-color: #6de2ffa8;
+ 
+}
+.class{
+  background-color: blueviolet;
+}
+#id {
+  background-color: yellow;
+} */
+
+
+/* селекторы вложенности и соседства, наведение на ссылку */
+/* li a {
+  color: green;
+} */
+
+/* псевдокласс */
+/* li a:hover {
+  color: green;
+} */
+
+/* соседний элемент */
+/* a + ul {
+	color: red
+} */
+
+/* Дочерний элемент и атрибуты */
+/* div#container > ul >li {
+	border: 1px solid black;
+}
+[title] {
+	color: red
+} */
+
+/* Специфичность и перечисление селекторов */
+/* div.text[title] {
+	color: red
+}
+
+div {
+	color: blue
+} */
+/* селекторы атрибутов */
+
+/* Селектор флажка, формы и отрицание */
+/* input:checked + span {
+	color: red
+}
+input[type="radio"]:checked + span {
+	color: greenyellow
+}
+ p:not(#text){  
+	color: red
+} */
+
+/* Селекторы отдельных элементов, первый, последний, чет/нечетные*/
+/* p:nth-child(even) {
+	color: red;
+}
+p:nth-child(odd) {
+	color: red;
+}
+p:last-child {
+	color: red;
+}
+p:nth-child(3) {
+	color: red;
+} */
+
+/* картинка на фон. Повторение фона и размер картинки */
+/* .img {
+	background-image: url(/Image/scale_2400.jpg);
+	width: 600px;
+	height: 600px;
+
+} */
+
+/* прозрачность */
+/* p {
+	background-color: rgba(255, 0, 0, 0.2);
+	color: white
+} */
+
+/* border */
+/* p {
+	border: 2px solid red
+} */
+
+/* треугольник */
+/* p {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 0 25px 50px 25px;
+	border-color: transparent transparent red ;
+} */
+
+/* Градиент */
+/* p {
+	background: red;
+	background: linear-gradient(127deg, red 20%, blue 65%);
+} */
+
+/* шрифт, размер, толщина, межбукв интервал, выравнивание, трансформация, декорация, маркер списка */
+/* p {
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	font-size: 40px;
+	font-style: italic;
+	font-weight: 400;
+	line-height: 32px;
+	letter-spacing: -5px;
+	text-align: center;
+	text-decoration: underline;
+	text-transform: uppercase;
+}
+li {
+	list-style: armenian;
+	text-decoration: line-through;
+} */
+
+/* margine, padding. Блочная модель box-sizing boder-box  */
+/* div {
+	color: aqua;
+}
+div.box1 {
+	box-sizing: border-box;
+	background: rgb(251, 86, 86);
+	width: 150px;
+	height: 150px;
+	margin: 20px;
+	padding: 20px;
+}
+div.box2 {
+	background: rgb(86, 223, 251);
+	margin:0 auto;
+	width: 150px;
+	height: 150px;
+} */
+
+/*  псевдоэлементы before и after */
+/* button {
+	cursor: pointer;
+}
+.new::after {
+	content: '\00a7';
+	color: red;
+	padding: 3px;
+	font-size: 10px;
+	border-radius: 3px;
+	margin-left: 10px;
+	background-color: aqua;
+} */
+
+/* flex контейнер и flex wrap */
+/* .parent {
+	display: flex;
+	flex-wrap: wrap ;
+	justify-content: space-between;
+	gap: 10px;
+	height: 250px;
+}
+.parent > div {
+	width: 50px;
+	height: 50px;
+	background-color: aqua;
+	margin: 5px;
+	padding: 10px;
+} */
+
+/* grid */
+.grid-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: 100px 50px;
+	gap: 5px 10px;
+	grid-template-areas: 
+	"area2 . ."
+	"area2 area3 area3";
+}
+.item {
+	background-color: rgb(234, 101, 101);
+} 
+/* .item1 {
+	grid-row: 1 / 3;
+} */
+/* .item6 {
+	grid-column: 3 / 5;
+} */
+.item1 {
+	grid-area: area2;
+}
+.item4 {
+	grid-area: area3;
+}
