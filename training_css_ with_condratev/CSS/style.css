@@ -178,7 +178,7 @@ div.box2 {
 } */
 
 /* grid */
-.grid-container {
+/* .grid-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr;
 	grid-template-rows: 100px 50px;
@@ -190,15 +190,73 @@ div.box2 {
 .item {
 	background-color: rgb(234, 101, 101);
 } 
-/* .item1 {
+.item1 {
 	grid-row: 1 / 3;
-} */
-/* .item6 {
+}
+.item6 {
 	grid-column: 3 / 5;
-} */
+}
 .item1 {
 	grid-area: area2;
 }
 .item4 {
 	grid-area: area3;
+} */
+
+/* .container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 50vh;
+	background: red;
+
+	display: grid;
+	place-items: center;
+	height: 60vh
+
+	position: relative;
+	height: 100vh
+
+	text-align: center;
+	line-height: 200px;
+	height: 200px
+} */
+
+/* .item {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 200px;
+	height: 100px;
+	margin-top: -50px;
+	margin-left: -100px 
+} */
+
+/* Masonry layout (плитка, как Pinterest) */
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	gap: 8px 4px;
+	height: 600px;
+	width: 100%;
+}
+
+.item {
+	width: calc(100% / 3);
+	background-color: aqua;
+}
+
+.item:nth-child(3n + 1) {order: 1;}
+.item:nth-child(3n + 2) {order: 2;}
+.item:nth-child(3n ) {order: 3;}
+
+.container::before,
+.container::after {
+	content: "";
+	flex-basis: 100%;
+	width: 0;
+	order: 2;
 }
