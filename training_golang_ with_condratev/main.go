@@ -1,25 +1,33 @@
 package main
 
-import "fmt"
+import (
+	"math/rand"
+	"fmt"
+)
 
 func main() {
-	// score := 0.0
-	// text := "Get ready!!!"
-	// text2 := "Your score: "
-	// text3 := "You go truba!"
-	// boolean := true
+	// Переменные :=
+	/*
+	score := 0.0
+	text := "Get ready!!!"
+	text2 := "Your score: "
+	text3 := "You go truba!"
+	boolean := true
 
-	// fmt.Println(boolean)
-	// fmt.Println(text)
-	// fmt.Println(text2, score)
+	fmt.Println(boolean)
+	fmt.Println(text)
+	fmt.Println(text2, score)
 
-	// score = score + 1
+	score = score + 1
 
-	// fmt.Println(text3)
-	// fmt.Println(text2, score)
+	fmt.Println(text3)
+	fmt.Println(text2, score)
 
-	score := 50
+	score := 50 
+	*/
 
+	// Условное ветвление if else
+	/*
 	if score > 10 {
 		if score > 15 {
 			fmt.Println("You megasupermen!!!")
@@ -52,7 +60,37 @@ func main() {
 		fmt.Println("You win!")
 	}
 
-	if score != 7 {
-		fmt.Println("...")
+	if score != 7 {fmt.Println("...")}
+	*/
+
+	// Цикл for
+	
+	score := 2
+	fmt.Println(score)
+
+	for i := 1; i <= 5; i++ {
+		score := 3
+		score +=1
+		fmt.Println("Итерация: ", i)
+		fmt.Println(score)
 	}
+
+	fmt.Println(score)
+
+	for {     //бесконечный цикл
+		score +=1
+
+		fmt.Println("Итерация: ", score)
+		// fmt.Println(score)
+		if rand.Intn(2000) == 1 {
+			fmt.Println("The end!")
+			break
+		}			
+	}
+	
+	fmt.Println(score)
+
+	
+
+
 }
