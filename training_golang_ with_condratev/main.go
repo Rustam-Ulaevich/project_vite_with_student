@@ -1,9 +1,22 @@
 package main
 
-import (
-	"math/rand"
-	"fmt"
-)
+import "fmt"
+
+
+func plus(a int, b int) int {
+
+    return a + b
+}
+
+func plusPlus(a, b, c int) int {
+    return a + b + c
+}
+
+func vals() (int, int) {
+    return 3, 7
+}
+
+var s int = 5
 
 func main() {
 	// Переменные :=
@@ -64,7 +77,7 @@ func main() {
 	*/
 
 	// Цикл for
-	
+	/*
 	score := 2
 	fmt.Println(score)
 
@@ -90,7 +103,45 @@ func main() {
 	
 	fmt.Println(score)
 
-	
+	*/
+
+	// Function
+
+    res := plus(1, 2)
+    fmt.Println("1+2 =", res)
+
+    res = plusPlus(1, 2, 3)
+    fmt.Println("1+2+3 =", res)
+
+    a, b := vals()
+    fmt.Println(a)
+    fmt.Println(b)
+
+    _, c := vals()
+    fmt.Println(c)
+
+	fmt.Println("До вызова функции")
+	number := sum(1, 2)
+	fmt.Println("После вызова функции")
+
+	fmt.Println("number:", number)
 
 
 }
+
+func sum(a int, b int) int{
+	fmt.Println("a:", a)
+	fmt.Println("b:", b)
+
+	s := a + b
+
+	return s
+}
+
+func a() int{
+	h := 1 + s
+
+	return h
+}
+
+
