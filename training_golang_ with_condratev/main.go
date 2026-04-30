@@ -1,22 +1,11 @@
 package main
 
-import "fmt"
+import (
+    "fmt"
+    "os"
+    "path/filepath"
+)
 
-
-func plus(a int, b int) int {
-
-    return a + b
-}
-
-func plusPlus(a, b, c int) int {
-    return a + b + c
-}
-
-func vals() (int, int) {
-    return 3, 7
-}
-
-var s int = 5
 
 func main() {
 	// Переменные :=
@@ -106,7 +95,7 @@ func main() {
 	*/
 
 	// Function
-
+	/*
     res := plus(1, 2)
     fmt.Println("1+2 =", res)
 
@@ -125,23 +114,40 @@ func main() {
 	fmt.Println("После вызова функции")
 
 	fmt.Println("number:", number)
+	*/
 
+	// Defer
 
+    path := filepath.Join(os.TempDir(), "defer.txt")
+    f := createFile(path)
+    defer closeFile(f)
+    writeFile(f)
 }
 
-func sum(a int, b int) int{
-	fmt.Println("a:", a)
-	fmt.Println("b:", b)
-
-	s := a + b
-
-	return s
+func createFile(p string) *os.File {
+    fmt.Println("creating")
+    f, err := os.Create(p)
+    if err != nil {
+        panic(err)
+    }
+    return f
 }
 
-func a() int{
-	h := 1 + s
-
-	return h
+func writeFile(f *os.File) {
+    fmt.Println("writing")
+    fmt.Fprintln(f, "data")
 }
+
+func closeFile(f *os.File) {
+    fmt.Println("closing")
+    err := f.Close()
+
+    if err != nil {
+        panic(err)
+    }
+}
+
+
+
 
 
