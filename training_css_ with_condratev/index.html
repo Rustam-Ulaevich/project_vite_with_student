@@ -7,7 +7,9 @@
   <title>Document</title>
 </head>
 <body>
-  <!-- <h1>Подготовка к собеседованию</h1> -->
+  <div class="container">
+	<div class="item">111</div>
+  </div>
 
   <!-- <p class="class">1</p>
   <p id="id">2</p> -->
@@ -116,6 +118,44 @@
 
 	<!-- <div class="triangle">Ghbdtn</div> -->
 
+	<!-- <button class="button">Кнопка</button>
+	<button class="magic-button">Кнопка</button> -->
+	<script>
+		
+function one(){
+    console.log('one');
+    
+}
+function two(){
+    one()
+    console.log('two');
+}
+function three(){
+    two()
+    console.log('three');
+}
+
+// three()
+
+function factorial(n) {
+    if(n<2) {
+        return 1
+    }
+    return console.log(n * factorial(n-1))
+}
+
+factorial(50)
+
+console.log('1'); // Sync
+
+setTimeout(() => console.log('2'), 0); // Macrotask
+
+Promise.resolve().then(() => console.log('3')); // Microtask
+
+console.log('4'); // Sync
+
+// Output order: 1, 4, 3, 2
+	</script>
 	
     
 </body>
