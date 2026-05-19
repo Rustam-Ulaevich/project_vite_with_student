@@ -5,7 +5,7 @@ import (
 )
 
 
-func main() {
+// func main() {
 	// Переменные :=
 	/*
 	score := 0.0
@@ -123,17 +123,55 @@ func main() {
 	*/
 
 	// Указатели
-
+	/*
 	b := 5
 	a := &b
 
-	fmt.Println(a, *a)
+	fmt.Println(a, *a)  // * разименование указателя
 	
-	var ptr *int  // nill указатель
+	var ptr *int  // nil указатель
 
 	fmt.Print(ptr)
+	*/
 	
-}
+	// Structures
+
+	type User struct {
+		Name string			// ""
+		Age int				// 0
+		PhoneNumber string	// ""
+		IsClose bool		// false
+		Rating float64		// 0.0
+	}
+
+	func (u User) RatingUp(rating float64){
+		if u.Rating + rating <= 10{
+			u.Rating += rating
+			fmt.Println("Рейтинг стал:", u.Rating)
+		}else {
+			fmt.Println("Не пройдена валидация")
+		}
+	}
+
+	func main() {
+  
+		user := User{
+			Name: "Dima",
+			Age: 32,
+			PhoneNumber: "+7 999 1234564",
+			IsClose: true,
+			Rating: 6.1,
+		}
+
+		fmt.Println("User:", user)
+		fmt.Println("User age:", user.Age)
+
+		user.RatingUp(4)
+
+	}
+
+
+// }
 
 // func createFile(p string) *os.File {
 //     fmt.Println("creating")

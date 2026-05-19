@@ -15,7 +15,7 @@ interface ApiResponse {
 
 const API_URL = 'http://localhost:3001/api';
 
-export function App() {
+export function Other() {
   // ✅ Явно указываем тип массива пользователей
   const [users, setUsers] = useState<User[]>([]);
   const [newUserName, setNewUserName] = useState<string>('');
