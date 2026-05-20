@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"go/types"
+	// "go/types"
+	"study/greeting"
 )
 
 // func main() {
@@ -136,6 +137,8 @@ import (
 
 // Structures
 
+/*
+
 type User struct {
 	Name        string  // ""
 	Age         int     // 0
@@ -215,18 +218,22 @@ func NewUser(
 		IsClose: isClose,
 		Rating: rating,
 	}
-}
+}	
+*/
 
 func main() {
 
-	user := NewUser(
-		"Dima", 32, "+7 999 1234564", true, 0.0,
-	)
+	// user := NewUser(
+	// 	"Dima", 32, "+7 999 1234564", true, 0.0,
+	// )
 
-	fmt.Println("User:", user)
-	fmt.Println("User age:", user.Age)
+	// fmt.Println("User:", user)
+	// fmt.Println("User age:", user.Age)
 
-	user.RatingUp(4)
+	// user.RatingUp(4)
+
+	fmt.Println("Main")
+	greeting.Gretting()
 
 }
 
