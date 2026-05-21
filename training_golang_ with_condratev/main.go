@@ -3,12 +3,22 @@ package main
 import (
 	"fmt"
 	// "go/types"
-	"study/greeting"
+	// "study/greeting"
 )
 
-// func main() {
-// Переменные :=
+type User struct {
+	Name string
+	Rating float64
+	Premium bool
+}
+
+
+func main() {
+
 /*
+
+	// Переменные :=
+
 	score := 0.0
 	text := "Get ready!!!"
 	text2 := "Your score: "
@@ -25,10 +35,10 @@ import (
 	fmt.Println(text2, score)
 
 	score := 50
-*/
 
-// Условное ветвление if else
-/*
+
+	// Условное ветвление if else
+
 	if score > 10 {
 		if score > 15 {
 			fmt.Println("You megasupermen!!!")
@@ -62,10 +72,10 @@ import (
 	}
 
 	if score != 7 {fmt.Println("...")}
-*/
 
-// Цикл for
-/*
+
+	// Цикл for
+
 	score := 2
 	fmt.Println(score)
 
@@ -91,10 +101,10 @@ import (
 
 	fmt.Println(score)
 
-*/
 
-// Function
-/*
+
+	// Function
+
     res := plus(1, 2)
     fmt.Println("1+2 =", res)
 
@@ -113,18 +123,18 @@ import (
 	fmt.Println("После вызова функции")
 
 	fmt.Println("number:", number)
-*/
 
-// Defer
-/*
+
+	// Defer
+
    path := filepath.Join(os.TempDir(), "defer.txt")
    f := createFile(path)
    defer closeFile(f)
    writeFile(f)
-*/
 
-// Указатели
-/*
+
+	// Указатели
+
 	b := 5
 	a := &b
 
@@ -133,109 +143,168 @@ import (
 	var ptr *int  // nil указатель
 
 	fmt.Print(ptr)
-*/
 
-// Structures
 
-/*
+	// Structures
 
-type User struct {
-	Name        string  // ""
-	Age         int     // 0
-	PhoneNumber string  // ""
-	IsClose     bool    // false
-	Rating      float64 // 0.0
-}
+	type User struct {
+		Name        string  // ""
+		Age         int     // 0
+		PhoneNumber string  // ""
+		IsClose     bool    // false
+		Rating      float64 // 0.0
+	}
 
-func (u User) RatingUp(rating float64) {
-	if u.Rating+rating <= 10 {
+	func (u User) RatingUp(rating float64) {
+		if u.Rating+rating <= 10 {
 		u.Rating += rating
 		fmt.Println("Рейтинг стал:", u.Rating)
-	} else {
-		fmt.Println("Не пройдена валидация")
+		} else {fmt.Println("Не пройдена валидация")}
 	}
-}
 
-func (u *User) ChangeName(newName string) {
-	if newName != "" {
+	func (u *User) ChangeName(newName string) {
+		if newName != "" {
 		u.Name = newName
-	} else {
-		fmt.Println("Получено пустое имя")
+		} else {fmt.Println("Получено пустое имя")}
 	}
-}
 
-func (u *User) ChangeAge(newAge int) {
+	func (u *User) ChangeAge(newAge int) {
 	if newAge > 0 && newAge < 150 {
 		u.Age = newAge
 	} else {
 		fmt.Println("Получено не валидное число")
 	}
-}
+	}
 
-func (u *User) RatingUpp(value float64) {
+	func (u *User) RatingUpp(value float64) {
 	if u.Rating + value <= 10.0 {
 		u.Rating += value
 	}
-}
+	}
 
-func (u *User) RatingDown(value float64) {
+	func (u *User) RatingDown(value float64) {
 	if u.Rating - value >= 0.0 {
 		u.Rating -= value
 	}
-}
+	}
 
-func (u *User) ChangeCloseAccount() {
+	func (u *User) ChangeCloseAccount() {
 	u.IsClose = !u.IsClose
-}
+	}
 
-func NewUser(
+	func NewUser(
 	name string,
 	age int,
 	phoneNumber string,
 	isClose bool,
 	rating float64,
-) User{
-	if name == "" {
-		return User{}
-	}
-	if age <= 0 || age >= 150 {
-		return User{}
-	}
-	if phoneNumber == "" {
-		return User{}
-	}
-	// if isClose != types.IsBoolean {
-	// 	return  User{} 
-	// }
-	if rating < 0.0 || rating > 10.0 {
-		return User{}
-	}
+	) User{
+	 	if name == "" {
+	 		return User{}
+		}
+		if age <= 0 || age >= 150 {
+			return User{}
+		}
+		if phoneNumber == "" {
+			return User{}
+		}
+		if isClose != types.IsBoolean {
+			return  User{} 
+		}
+		if rating < 0.0 || rating > 10.0 {
+			return User{}
+		}
 
-	return User{
-		Name: name,
-		Age: age,
-		PhoneNumber: phoneNumber,
-		IsClose: isClose,
-		Rating: rating,
+		return User{ Name: name, Age: age, PhoneNumber: phoneNumber, IsClose: isClose, Rating: rating,}
 	}
-}	
 */
 
-func main() {
 
-	// user := NewUser(
-	// 	"Dima", 32, "+7 999 1234564", true, 0.0,
-	// )
+	// Arrays
 
-	// fmt.Println("User:", user)
-	// fmt.Println("User age:", user.Age)
+	// arr := [5] int {2, 3, 5, 10, 1} 
 
-	// user.RatingUp(4)
+	// for i := 0; i < 4; i++ {
+	// 	if arr[i]%2 == 0 {
+	// 		arr[i] *= 2
+	// 	}
+	// 	fmt.Println( i, "-", arr[i])
+	// }
 
-	fmt.Println("Main")
-	greeting.Gretting()
+	userArray := [12]User{
+		User{
+			Name: "Mike",
+			Rating: 5.5,
+			Premium: true,
+		},
+		User{
+			Name: "Nina",
+			Rating: 7.5,
+			Premium: true,
+		},
+		User{
+			Name: "Ura",
+			Rating: 1.2,
+			Premium: true,
+		},
+		User{
+			Name: "Mike",
+			Rating: 5.5,
+			Premium: true,
+		},
+		User{
+			Name: "Nina",
+			Rating: 7.5,
+			Premium: true,
+		},
+		User{
+			Name: "Ura",
+			Rating: 1.2,
+			Premium: true,
+		},
+		User{
+			Name: "Mike",
+			Rating: 5.5,
+			Premium: true,
+		},
+		User{
+			Name: "Nina",
+			Rating: 7.5,
+			Premium: true,
+		},
+		User{
+			Name: "Ura",
+			Rating: 1.2,
+			Premium: true,
+		},
+		User{
+			Name: "Mike",
+			Rating: 5.5,
+			Premium: true,
+		},
+		User{
+			Name: "Nina",
+			Rating: 7.5,
+			Premium: true,
+		},
+		User{
+			Name: "Ura",
+			Rating: 1.2,
+			Premium: true,
+		},
+	}
 
-}
+	for index, value := range userArray {
+		value.Rating += 1
+		value.Premium = false
+		value.Name += "-loh"
+		fmt.Println(index, value)
+	}
+	
+
+}	
+
+
 
 // }
 
