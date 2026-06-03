@@ -15,7 +15,7 @@ type User struct {
 
 func main() {
 
-/*
+	/*
 
 	// Переменные :=
 
@@ -92,7 +92,6 @@ func main() {
 		score +=1
 
 		fmt.Println("Итерация: ", score)
-		// fmt.Println(score)
 		if rand.Intn(2000) == 1 {
 			fmt.Println("The end!")
 			break
@@ -100,7 +99,6 @@ func main() {
 	}
 
 	fmt.Println(score)
-
 
 
 	// Function
@@ -217,19 +215,18 @@ func main() {
 
 		return User{ Name: name, Age: age, PhoneNumber: phoneNumber, IsClose: isClose, Rating: rating,}
 	}
-*/
 
 
 	// Arrays
 
-	// arr := [5] int {2, 3, 5, 10, 1} 
+	arr := [5] int {2, 3, 5, 10, 1} 
 
-	// for i := 0; i < 4; i++ {
-	// 	if arr[i]%2 == 0 {
-	// 		arr[i] *= 2
-	// 	}
-	// 	fmt.Println( i, "-", arr[i])
-	// }
+	for i := 0; i < 4; i++ {
+		if arr[i]%2 == 0 {
+			arr[i] *= 2
+		}
+		fmt.Println( i, "-", arr[i])
+	}
 
 	userArray := [12]User{
 		User{
@@ -299,34 +296,68 @@ func main() {
 		value.Premium = false
 		value.Name += "-loh"
 		fmt.Println(index, value)
+	}   
+
+	nums := []int{2, 7, 11, 15}
+    target := 9
+    
+    fmt.Println(twoSum(nums, target))
+
+	*/
+
+	// Slice
+
+	userArray := []User{    // в [] не указывается длинна к в массивах
+		User{
+			Name: "Mike",
+			Rating: 5.5,
+			Premium: true,
+		},
+		User{
+			Name: "Nina",
+			Rating: 7.5,
+			Premium: true,
+		},
+		User{
+			Name: "Ura",
+			Rating: 1.2,
+			Premium: true,
+		},	
 	}
+	fmt.Println("len:", len(userArray))
+	fmt.Println("cap:", cap(userArray))
 	
+	userArray = append(
+		userArray, 
+		User{
+			Name: "Victor",
+			Rating: 4.0,
+			Premium: true,
+		},
+	)
+	fmt.Println("len:", len(userArray))
+	fmt.Println("cap:", cap(userArray))
 
-}	
+	userArray = append(
+		userArray, 
+		User{
+			Name: "Ola",
+			Rating: 7.0,
+			Premium: false,
+		},
+	)
+	fmt.Println("len:", len(userArray))
+	fmt.Println("cap:", cap(userArray))
 
 
+	intSlice := make([]int, 0)
+	fmt.Println(intSlice)
+	intSlice = append(intSlice, 10, 5, 12, 0, 2)
+	fmt.Println(intSlice, len(intSlice), cap(intSlice))
+	intSlice = append(intSlice, 7)
+	fmt.Println(intSlice, len(intSlice), cap(intSlice))
+	intSlice = append(intSlice, 7)
+	fmt.Println(intSlice, len(intSlice), cap(intSlice))
 
-// }
 
-// func createFile(p string) *os.File {
-//     fmt.Println("creating")
-//     f, err := os.Create(p)
-//     if err != nil {
-//         panic(err)
-//     }
-//     return f
-// }
-
-// func writeFile(f *os.File) {
-//     fmt.Println("writing")
-//     fmt.Fprintln(f, "data")
-// }
-
-// func closeFile(f *os.File) {
-//     fmt.Println("closing")
-//     err := f.Close()
-
-//     if err != nil {
-//         panic(err)
-//     }
-// }
+}
