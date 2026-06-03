@@ -307,6 +307,8 @@ func main() {
 
 	// Slice
 
+	/*
+
 	userArray := []User{    // в [] не указывается длинна к в массивах
 		User{
 			Name: "Mike",
@@ -359,5 +361,44 @@ func main() {
 	intSlice = append(intSlice, 7)
 	fmt.Println(intSlice, len(intSlice), cap(intSlice))
 
+	*/
+
+	// Map
+
+	weather := map[int] int{
+		1: +1,
+		2: +5,
+		3: -1,
+		4: +8,
+		5: +12,
+	}
+
+	fmt.Println(weather[1])
+	fmt.Println(weather[6]) // выведет 0
+
+	c, s := weather[6]
+	fmt.Println(c, s)
+
+	for i, v := range weather{
+		if v > 0 {
+			weather[i] = 1
+		}else{
+			weather[i] = 0
+		}
+	}
+	fmt.Println(weather)
+	weather[7] = +15
+	fmt.Println(weather)
+
+	for k, v := range weather {
+		weather[k] = v +10   // v в цикле range — это копия значения, а не ссылка на элемент map
+	}
+
+	fmt.Println(weather)
+
+	weather2 := make(map[int]int, 10)
+	weather2[10] = +4
+	weather2[11] = +6
+	fmt.Println(weather2, len(weather2))
 
 }
