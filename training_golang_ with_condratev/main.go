@@ -2,18 +2,41 @@ package main
 
 import (
 	"fmt"
-	// "go/types"
-	// "study/greeting"
 )
 
-type User struct {
-	Name string
-	Rating float64
-	Premium bool
+type Auto interface {       // создание интерфайса
+	StepOnGas()
 }
+
+type BMW struct {}          // создание структуры
+
+func (b BMW) StepOnGas() {
+	fmt.Println("BMW is the fastest car!!!")
+}
+
+type Opel struct {}
+ 
+func (o Opel) StepOnGas() {
+	fmt.Println("Opel is a car for the family")
+}
+
+func ride(a Auto) {
+	fmt.Println("This is Auto")
+	a.StepOnGas()
+}
+ 
+
 
 
 func main() {
+
+	// bmw := BMW{}
+	// bmw.StepOnGas()
+
+	oldCar := Opel{}
+	// oldCar.StepOnGas()
+
+	ride(oldCar)
 
 	/*
 
@@ -303,7 +326,7 @@ func main() {
     
     fmt.Println(twoSum(nums, target))
 
-	*/
+	
 
 	// Slice
 
@@ -364,41 +387,52 @@ func main() {
 	*/
 
 	// Map
+	
+	/*
 
-	weather := map[int] int{
-		1: +1,
-		2: +5,
-		3: -1,
-		4: +8,
-		5: +12,
-	}
+	// weather := map[int] int{
+	// 	1: +1,
+	// 	2: +5,
+	// 	3: -1,
+	// 	4: +8,
+	// 	5: +12,
+	// }
 
-	fmt.Println(weather[1])
-	fmt.Println(weather[6]) // выведет 0
+	// fmt.Println(weather[1])
+	// fmt.Println(weather[6]) // выведет 0
 
-	c, s := weather[6]
-	fmt.Println(c, s)
+	// c, s := weather[6]
+	// fmt.Println(c, s)
 
-	for i, v := range weather{
-		if v > 0 {
-			weather[i] = 1
-		}else{
-			weather[i] = 0
-		}
-	}
-	fmt.Println(weather)
-	weather[7] = +15
-	fmt.Println(weather)
+	// for i, v := range weather{
+	// 	if v > 0 {
+	// 		weather[i] = 1
+	// 	}else{
+	// 		weather[i] = 0
+	// 	}
+	// }
+	// fmt.Println(weather)
+	// weather[7] = +15
+	// fmt.Println(weather)
 
-	for k, v := range weather {
-		weather[k] = v +10   // v в цикле range — это копия значения, а не ссылка на элемент map
-	}
+	// for k, v := range weather {
+	// 	weather[k] = v +10   // v в цикле range — это копия значения, а не ссылка на элемент map
+	// }
 
-	fmt.Println(weather)
+	// fmt.Println(weather)
 
-	weather2 := make(map[int]int, 10)
-	weather2[10] = +4
-	weather2[11] = +6
-	fmt.Println(weather2, len(weather2))
+	// weather2 := make(map[int]int, 10)
+	// weather2[10] = +4
+	// weather2[11] = +6
+	// fmt.Println(weather2, len(weather2))
+
+	*/
+
+
+
+
+
+
+
 
 }
