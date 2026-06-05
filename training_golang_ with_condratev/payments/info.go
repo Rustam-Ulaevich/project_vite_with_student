@@ -1,4 +1,4 @@
-package main
+package payments
 
 type PaymentInfo struct {
 	Description string

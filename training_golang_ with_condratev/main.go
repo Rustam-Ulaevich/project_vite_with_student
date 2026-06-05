@@ -2,437 +2,109 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"time"
 )
 
-type Auto interface {       // создание интерфайса
-	StepOnGas()
+
+type PaymentInfo struct {
+	ID          int
+	Description string
+	Usd         int
+	Cancelled   bool
 }
 
-type BMW struct {}          // создание структуры
+//   ---Slice---
 
-func (b BMW) StepOnGas() {
-	fmt.Println("BMW is the fastest car!!!")
+type PaymentModuleWithSlice struct {
+	s []PaymentInfo
 }
 
-type Opel struct {}
- 
-func (o Opel) StepOnGas() {
-	fmt.Println("Opel is a car for the family")
+func (m *PaymentModuleWithSlice) AddInfo(info PaymentInfo) {
+	m.s = append(m.s, info)
 }
 
-func ride(a Auto) {
-	fmt.Println("This is Auto")
-	a.StepOnGas()
+func (m *PaymentModuleWithSlice) GetInfo(id int) PaymentInfo {
+	for _, info := range m.s {
+		if info.ID == id {
+			return info
+		}
+	}
+	return PaymentInfo{}
 }
- 
 
+//  ---Map---
 
+type PaymentModuleWithMap struct {
+	m map[int]PaymentInfo
+}
+
+func (m *PaymentModuleWithMap) AddInfo(info PaymentInfo) {
+	m.m[info.ID] = info
+}
+
+func (m *PaymentModuleWithMap) GetInfo(id int) PaymentInfo {
+	info, ok := m.m[id]
+	if !ok {
+		return PaymentInfo{}
+	}
+	return info
+}
 
 func main() {
 
-	// bmw := BMW{}
-	// bmw.StepOnGas()
+	pSlice := PaymentModuleWithSlice{}
+	pMap := PaymentModuleWithMap{
+		m: make(map[int]PaymentInfo),
+	}
 
-	oldCar := Opel{}
-	// oldCar.StepOnGas()
-
-	ride(oldCar)
-
-	/*
-
-	// Переменные :=
-
-	score := 0.0
-	text := "Get ready!!!"
-	text2 := "Your score: "
-	text3 := "You go truba!"
-	boolean := true
-
-	fmt.Println(boolean)
-	fmt.Println(text)
-	fmt.Println(text2, score)
-
-	score = score + 1
-
-	fmt.Println(text3)
-	fmt.Println(text2, score)
-
-	score := 50
+	iterations := 100000
 
 
-	// Условное ветвление if else
+	//  -------------AddInfo--------------------
 
-	if score > 10 {
-		if score > 15 {
-			fmt.Println("You megasupermen!!!")
-		} else {
-			fmt.Println("You good men!")
+	before := time.Now()
+
+	for i := 0; i < iterations; i++ {
+		info := PaymentInfo{
+			ID: i,
+			Description: strconv.Itoa(i),
 		}
-	}else{
-		fmt.Println("You need, very work...")
+		pSlice.AddInfo(info)
 	}
 
-	if score > 15 {
-		fmt.Println("You meggasupermaen!!!")
-	}else if score > 10 {
-		fmt.Println("You good men!")
-	}else{
-		fmt.Print("You need to work...")
-	}
+	fmt.Println("Slice add:", time.Since(before))
 
-	if score == 12 {
-		fmt.Println("Дюжина")
-	} else if score == 21 {
-		fmt.Println("Очко")
-	} else if score == 50 {
-		fmt.Println("Полтинник")
-	} else {
-		fmt.Println("Ни куда не попал")
-	}
+	before = time.Now()
 
-	if score >= 10 {
-		fmt.Println("You win!")
-	}
-
-	if score != 7 {fmt.Println("...")}
-
-
-	// Цикл for
-
-	score := 2
-	fmt.Println(score)
-
-	for i := 1; i <= 5; i++ {
-		score := 3
-		score +=1
-		fmt.Println("Итерация: ", i)
-		fmt.Println(score)
-	}
-
-	fmt.Println(score)
-
-	for {     //бесконечный цикл
-		score +=1
-
-		fmt.Println("Итерация: ", score)
-		if rand.Intn(2000) == 1 {
-			fmt.Println("The end!")
-			break
+	for i := 0; i < iterations; i++ {
+		info := PaymentInfo{
+			ID: i,
+			Description: strconv.Itoa(i),
 		}
+		pMap.AddInfo(info)
 	}
 
-	fmt.Println(score)
+	fmt.Println("Map add:", time.Since(before))
 
 
-	// Function
+	// ----------------MapInfo---------------------
 
-    res := plus(1, 2)
-    fmt.Println("1+2 =", res)
+	before = time.Now()
 
-    res = plusPlus(1, 2, 3)
-    fmt.Println("1+2+3 =", res)
-
-    a, b := vals()
-    fmt.Println(a)
-    fmt.Println(b)
-
-    _, c := vals()
-    fmt.Println(c)
-
-	fmt.Println("До вызова функции")
-	number := sum(1, 2)
-	fmt.Println("После вызова функции")
-
-	fmt.Println("number:", number)
-
-
-	// Defer
-
-   path := filepath.Join(os.TempDir(), "defer.txt")
-   f := createFile(path)
-   defer closeFile(f)
-   writeFile(f)
-
-
-	// Указатели
-
-	b := 5
-	a := &b
-
-	fmt.Println(a, *a)  // * разименование указателя
-
-	var ptr *int  // nil указатель
-
-	fmt.Print(ptr)
-
-
-	// Structures
-
-	type User struct {
-		Name        string  // ""
-		Age         int     // 0
-		PhoneNumber string  // ""
-		IsClose     bool    // false
-		Rating      float64 // 0.0
+	for i := 0; i < iterations; i++ {
+		info := pSlice.GetInfo(i)
+		_ = info
 	}
+	fmt.Println("Slice get:", time.Since(before))
 
-	func (u User) RatingUp(rating float64) {
-		if u.Rating+rating <= 10 {
-		u.Rating += rating
-		fmt.Println("Рейтинг стал:", u.Rating)
-		} else {fmt.Println("Не пройдена валидация")}
+	before = time.Now()
+
+	for i := 0; i < iterations; i++ {
+		info := pMap.GetInfo(i)
+		_ = info
 	}
-
-	func (u *User) ChangeName(newName string) {
-		if newName != "" {
-		u.Name = newName
-		} else {fmt.Println("Получено пустое имя")}
-	}
-
-	func (u *User) ChangeAge(newAge int) {
-	if newAge > 0 && newAge < 150 {
-		u.Age = newAge
-	} else {
-		fmt.Println("Получено не валидное число")
-	}
-	}
-
-	func (u *User) RatingUpp(value float64) {
-	if u.Rating + value <= 10.0 {
-		u.Rating += value
-	}
-	}
-
-	func (u *User) RatingDown(value float64) {
-	if u.Rating - value >= 0.0 {
-		u.Rating -= value
-	}
-	}
-
-	func (u *User) ChangeCloseAccount() {
-	u.IsClose = !u.IsClose
-	}
-
-	func NewUser(
-	name string,
-	age int,
-	phoneNumber string,
-	isClose bool,
-	rating float64,
-	) User{
-	 	if name == "" {
-	 		return User{}
-		}
-		if age <= 0 || age >= 150 {
-			return User{}
-		}
-		if phoneNumber == "" {
-			return User{}
-		}
-		if isClose != types.IsBoolean {
-			return  User{} 
-		}
-		if rating < 0.0 || rating > 10.0 {
-			return User{}
-		}
-
-		return User{ Name: name, Age: age, PhoneNumber: phoneNumber, IsClose: isClose, Rating: rating,}
-	}
-
-
-	// Arrays
-
-	arr := [5] int {2, 3, 5, 10, 1} 
-
-	for i := 0; i < 4; i++ {
-		if arr[i]%2 == 0 {
-			arr[i] *= 2
-		}
-		fmt.Println( i, "-", arr[i])
-	}
-
-	userArray := [12]User{
-		User{
-			Name: "Mike",
-			Rating: 5.5,
-			Premium: true,
-		},
-		User{
-			Name: "Nina",
-			Rating: 7.5,
-			Premium: true,
-		},
-		User{
-			Name: "Ura",
-			Rating: 1.2,
-			Premium: true,
-		},
-		User{
-			Name: "Mike",
-			Rating: 5.5,
-			Premium: true,
-		},
-		User{
-			Name: "Nina",
-			Rating: 7.5,
-			Premium: true,
-		},
-		User{
-			Name: "Ura",
-			Rating: 1.2,
-			Premium: true,
-		},
-		User{
-			Name: "Mike",
-			Rating: 5.5,
-			Premium: true,
-		},
-		User{
-			Name: "Nina",
-			Rating: 7.5,
-			Premium: true,
-		},
-		User{
-			Name: "Ura",
-			Rating: 1.2,
-			Premium: true,
-		},
-		User{
-			Name: "Mike",
-			Rating: 5.5,
-			Premium: true,
-		},
-		User{
-			Name: "Nina",
-			Rating: 7.5,
-			Premium: true,
-		},
-		User{
-			Name: "Ura",
-			Rating: 1.2,
-			Premium: true,
-		},
-	}
-
-	for index, value := range userArray {
-		value.Rating += 1
-		value.Premium = false
-		value.Name += "-loh"
-		fmt.Println(index, value)
-	}   
-
-	nums := []int{2, 7, 11, 15}
-    target := 9
-    
-    fmt.Println(twoSum(nums, target))
-
-	
-
-	// Slice
-
-	/*
-
-	userArray := []User{    // в [] не указывается длинна к в массивах
-		User{
-			Name: "Mike",
-			Rating: 5.5,
-			Premium: true,
-		},
-		User{
-			Name: "Nina",
-			Rating: 7.5,
-			Premium: true,
-		},
-		User{
-			Name: "Ura",
-			Rating: 1.2,
-			Premium: true,
-		},	
-	}
-	fmt.Println("len:", len(userArray))
-	fmt.Println("cap:", cap(userArray))
-	
-	userArray = append(
-		userArray, 
-		User{
-			Name: "Victor",
-			Rating: 4.0,
-			Premium: true,
-		},
-	)
-	fmt.Println("len:", len(userArray))
-	fmt.Println("cap:", cap(userArray))
-
-	userArray = append(
-		userArray, 
-		User{
-			Name: "Ola",
-			Rating: 7.0,
-			Premium: false,
-		},
-	)
-	fmt.Println("len:", len(userArray))
-	fmt.Println("cap:", cap(userArray))
-
-
-	intSlice := make([]int, 0)
-	fmt.Println(intSlice)
-	intSlice = append(intSlice, 10, 5, 12, 0, 2)
-	fmt.Println(intSlice, len(intSlice), cap(intSlice))
-	intSlice = append(intSlice, 7)
-	fmt.Println(intSlice, len(intSlice), cap(intSlice))
-	intSlice = append(intSlice, 7)
-	fmt.Println(intSlice, len(intSlice), cap(intSlice))
-
-	*/
-
-	// Map
-	
-	/*
-
-	// weather := map[int] int{
-	// 	1: +1,
-	// 	2: +5,
-	// 	3: -1,
-	// 	4: +8,
-	// 	5: +12,
-	// }
-
-	// fmt.Println(weather[1])
-	// fmt.Println(weather[6]) // выведет 0
-
-	// c, s := weather[6]
-	// fmt.Println(c, s)
-
-	// for i, v := range weather{
-	// 	if v > 0 {
-	// 		weather[i] = 1
-	// 	}else{
-	// 		weather[i] = 0
-	// 	}
-	// }
-	// fmt.Println(weather)
-	// weather[7] = +15
-	// fmt.Println(weather)
-
-	// for k, v := range weather {
-	// 	weather[k] = v +10   // v в цикле range — это копия значения, а не ссылка на элемент map
-	// }
-
-	// fmt.Println(weather)
-
-	// weather2 := make(map[int]int, 10)
-	// weather2[10] = +4
-	// weather2[11] = +6
-	// fmt.Println(weather2, len(weather2))
-
-	*/
-
-
-
-
-
-
+	fmt.Println("Map get:", time.Since(before))
 
 
 }
