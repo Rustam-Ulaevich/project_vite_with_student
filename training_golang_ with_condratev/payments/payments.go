@@ -6,27 +6,58 @@ type PaymentMethod interface {
 }
 
 type PaymentModule struct{
+	paymentsInfo map[int]PaymentInfo
 	paymentMethod PaymentMethod
 }
 
-func NewPaymentModule(paymentMethod PaymentMethod) PaymentModule {
-	return PaymentModule{
+func NewPaymentModule(paymentMethod PaymentMethod) *PaymentModule {
+	return &PaymentModule{
+		paymentsInfo: make(map[int]PaymentInfo),
 		paymentMethod: paymentMethod,
 	}
 }
 
-// func (p PaymentModule) Pay(description string, usd int) int {
-// 	id := p.paymentMethod.Pay(usd)
+func (p PaymentModule) Pay(description string, usd int) int {
 
-// 	info := PaymentInfo{
-// 		Description: description,
-// 		Usd:       	 usd,
-// 		Cancelled:   false,
-// 	}
-// }
+	id := p.paymentMethod.Pay(usd)  // проведение оплаты и получение её id
 
-func (p PaymentModule) Cancel() {}
+	info := PaymentInfo{
+		Description: description,
+		Usd:       	 usd,
+		Cancelled:   false,
+	}
 
-func (p PaymentModule) Info() {}
+	p.paymentsInfo[id] = info    // Сохранение инфы об оплате
 
-func (p PaymentModule) AllInfo() {}
+	return id
+}
+
+func (p PaymentModule) Cancel(id int) {
+	info, ok := p.paymentsInfo[id]
+	if !ok {
+		return
+	}
+
+	p.paymentMethod.Cancel(id)
+
+	info.Cancelled = true
+
+	p.paymentsInfo[id] = info
+}
+
+func (p PaymentModule) Info(id int) PaymentInfo {
+	info, ok := p.paymentsInfo[id]
+	if !ok {
+		return PaymentInfo{}
+	}
+
+	return info
+}
+
+func (p PaymentModule) AllInfo() map[int]PaymentInfo {
+	tempMap := make(map[int]PaymentInfo, len(p.paymentsInfo))
+	for k, v := range p.paymentsInfo{
+		tempMap[k] = v
+	}
+	return tempMap
+}
