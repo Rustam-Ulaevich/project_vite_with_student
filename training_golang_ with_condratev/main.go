@@ -22,6 +22,20 @@ func Pay(user *User, usd int) error{
 
 func main() {
 
+	defer func(){                   // для фиксации panic
+		p := recover()
+		if p != nil {
+			fmt.Println("Произошла паника:", p)
+		}
+	}()
+
+	// a := 0	        // Panic
+	// b := 1/a        // на 0 делить нельзя
+	// fmt.Println(b)
+
+	slice := []int{1, 2, 3} // panic: runtime error: index out of range [4] with length 3
+	fmt.Println(slice[4])
+
 	user := User{
 		Name: "Mike",
 		Ballance: 100,
