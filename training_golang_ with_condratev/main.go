@@ -1,79 +1,35 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	// "study/payments"
-	// "study/payments/methods"
+	"time"
 )
 
-type User struct {
-	Name string
-	Ballance int
+func mine(transferPoint chan int, n int) {
+	fmt.Println("Действие №", n, "началось...")
+	time.Sleep(1*time.Second)
+	fmt.Println("Действие №", n, "закончилось...")
+
+	transferPoint <- 10                                // Отправка числа 10 в канал
+	fmt.Println("Действие №", n, "Число передано!!!")
 }
 
-func Pay(user *User, usd int) error{
-	if user.Ballance - usd < 0 {
-		return errors.New("Недостаточно средств")
-	}
-	user.Ballance -= usd
-	return nil
-}
 
 func main() {
+	coal := 0
 
-	defer func(){                   // для фиксации panic
-		p := recover()
-		if p != nil {
-			fmt.Println("Произошла паника:", p)
-		}
-	}()
+	transferPoint := make(chan int)  // создание канала
 
-	// a := 0	        // Panic
-	// b := 1/a        // на 0 делить нельзя
-	// fmt.Println(b)
+	initTime := time.Now()
 
-	slice := []int{1, 2, 3} // panic: runtime error: index out of range [4] with length 3
-	fmt.Println(slice[4])
+	go mine(transferPoint, 1)    // асинхронный вызов (в отдельной горутине)
+	go mine(transferPoint, 2)
+	go mine(transferPoint, 3)
 
-	user := User{
-		Name: "Mike",
-		Ballance: 100,
-	}
+	coal += <- transferPoint   //  получение значения из канала
+	coal += <- transferPoint
+	coal += <- transferPoint
 
-	fmt.Println(user)
-
-	err := Pay(&user, 5)
-
-	fmt.Println(user)
-
-	if nil != err {
-		fmt.Println("Оплаты не было! Причина:", err.Error())
-	} else {
-		fmt.Println("Оплата произведена")
-	}
-
-
-	// method := methods.NewBonus()
-
-	// paymentModule := payments.NewPaymentModule(method)
-
-
-	// o1 := paymentModule.Pay("car", 5600)
-	// o2 := paymentModule.Pay("beer", 10)
-	// paymentModule.Pay("house", 15000)
-
-	// allInfo := paymentModule.AllInfo()
-
-	// fmt.Println(allInfo)
-
-	// paymentModule.Cancel(o1)
-
-	// allInfo = paymentModule.AllInfo()
-
-	// fmt.Println(allInfo)
-
-	// info := paymentModule.Info(o2)
-
-	// fmt.Println(info)
+	fmt.Println("Накоплено", coal, "единиц")
+	fmt.Println("Прошло времени:", time.Since(initTime))
 }
