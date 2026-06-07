@@ -26,6 +26,14 @@ func main() {
 	go mine(transferPoint, 2)
 	go mine(transferPoint, 3)
 
+	go func(){                  //анонимная ф-ая в горутинах
+		for {
+			fmt.Println("Анонимная функция")
+			time.Sleep(100*time.Millisecond)
+		}
+
+	}()
+
 	coal += <- transferPoint   //  получение значения из канала
 	coal += <- transferPoint
 	coal += <- transferPoint
