@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"strconv"
+	"math/rand"
 	"time"
-	
 )
 
 /*
@@ -20,6 +19,76 @@ import (
 
 
 func main() {
+
+	// ch := make(chan int)  // create new chanel
+
+	// // ---------closed chanel-----------
+
+	// close(ch)             //  closed chanel
+
+	// //close(ch)            // !!!!!! panic: close of closed channel
+
+	// v1 := <-ch            //read closed chanel
+	// v2 := <-ch
+	// v3 := <-ch
+
+	// fmt.Println(v1, v2, v3)
+
+	// v4, ok1 := <-ch        //read closed chanel
+	// v5, ok2 := <-ch
+	// v6, ok3 := <-ch
+
+	// fmt.Println(v4, v5, v6, ok1, ok2, ok3)
+
+	// ch <- 10               //   !!!!!!!!!!!panic: send on closed channel
+
+
+	transferPoint := make(chan int)
+
+	go func(){
+		iterations := 3 + rand.Intn(4)  // random 3 + 0..1..2..3
+		fmt.Println("iterations:", iterations)
+
+		for i := 1; i <= iterations; i++ {
+			transferPoint <- 10
+			time.Sleep(300*time.Millisecond)
+		}
+
+		close(transferPoint)		
+	}()
+
+	coal := 0
+
+	for{
+		v, ok := <- transferPoint
+		if !ok {
+			fmt.Println("Все действия канала завершены")
+			break
+		}
+
+		coal += v
+
+		// fmt.Println(coal)
+	}
+
+	// fmt.Println("Итого:", coal)
+
+
+
+	//----------nil chanel--------------
+
+	var chNil chan string                             // nil chanel
+	//var chNil chan string = make(chan string)     // initialization is need
+
+	go func ()  {
+		chNil <- "Random string"
+	}()
+
+	v := <-chNil
+
+	fmt.Println(v)   // !!!!!!!!!!!!!!fatal error: all goroutines are asleep - deadlock!
+
+	/*
 
 	strChanel := make(chan string)
 	intChanel := make(chan int)
@@ -55,14 +124,7 @@ func main() {
 		}
 		
 	}
-
 	
-
-	
-
-
-
-	/*
 	coal := 0
 
 	transferPoint := make(chan int)  // создание канала
