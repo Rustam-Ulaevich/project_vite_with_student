@@ -3,44 +3,52 @@ package main
 import (
 	"fmt"
 	"sync"
-	// "sync/atomic"
+	"time"
 )
 
-// var number int = 0  // 10000
-// var number atomic.Int64
-var slice []int
+var likes int = 0
+var mtx sync.RWMutex
 
-var mtx sync.Mutex  // sync.Mutex - взаимное исключение (mutual exclusion)
-
-func increment(wg *sync.WaitGroup){
+func setLike(wg *sync.WaitGroup) {
 	defer wg.Done()
-	
-	for i := 1; i <= 1000; i++{
-		// number.Add(1)
-		mtx.Lock()                //блокирует мьютекс
-		slice = append(slice, i)
-		mtx.Unlock()             // разблокирует мьютекс. Позволяет другой ожидающей горутине войти в критическую секцию	
+
+	for i:=1; i<=100_000; i++{
+		mtx.Lock()
+		likes++
+		mtx.Unlock()
 	}	
 }
 
+func getLike(wg *sync.WaitGroup) {
+	defer wg.Done()
+	for i:=1; i<=100_000; i++{
+		mtx.RLock() // блокировка для ЧТЕНИЯ (read lock).RLock позволяет параллельное чтение множеству горутин
+					// Блокируется только если кто-то пишет (владеет Lock())
+					// Если другие горутины только читают - RLock не блокирует
+		_ = likes
+		mtx.RUnlock()
+	}
+}
+
 func main() {
+
 	wg := &sync.WaitGroup{}
 
-	wg.Add(10)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
-	go increment(wg)
+	initTime := time.Now()
+
+	for i := 1; i <= 10; i++{
+		wg.Add(1)
+		go setLike(wg)
+	}
+
+	for i := 1; i <= 10; i++{
+		wg.Add(1)
+		go getLike(wg)
+	}
 
 	wg.Wait()
 
-	// fmt.Println("Main the end", number.Load())	
-	fmt.Println("Main the end", len(slice))	
+	fmt.Println("Время выполнения:", time.Since(initTime))
+	 
 
 }
