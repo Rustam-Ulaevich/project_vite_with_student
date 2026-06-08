@@ -1,57 +1,36 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"sync"
 	"time"
 )
 
-// Parent context
-func parentChild(ctx context.Context, n int) {
-	for{
-		select{
-		case <- ctx.Done():
-			fmt.Println("parentChild has ended-----!!!", n)
-			return
-		default:
-			fmt.Println("parentChild continues", n)
-		}		
-		time.Sleep(200*time.Millisecond)
-	}
-}
+func postman(wg *sync.WaitGroup, text string) { // wg нужен для синхронизации горутин с main
+	defer wg.Done()  // выполнится ПЕРЕД выходом из функции
 
-// Child context
-func childFunc(ctx context.Context, n int) {
-	for{
-		select{
-		case <- ctx.Done():   // возвращает канал, который закрывается при отмене контекста
-			fmt.Println("childFunc has ended-----!!!", n)
-			return
-		default:   // срабатывает, если ctx.Done() еще не закрыт
-			fmt.Println("childFunc continues", n)// Без sleep горутина бы спамила сообщениями каждую наносекунду
-		}
+	for i := 1; i <= 3; i++{
+		fmt.Println("Я отнёс", text, "в", i, "раз")
 		time.Sleep(200*time.Millisecond)
-	}
+	}	
 }
 
 
 func main() {
-	parentContext, parentCancel := context.WithCancel(context.Background())
-	childContext, childCancel := context.WithCancel(parentContext)
 
-	go parentChild(parentContext, 1)
-	go parentChild(parentContext, 2)
-	go parentChild(parentContext, 3)
-	go childFunc(childContext, 1)
-	go childFunc(childContext, 2)
-	go childFunc(childContext, 3)
+	wg := sync.WaitGroup{}   // Создаём WaitGroup (счётчик синхронизации)
 
-	time.Sleep(1*time.Second)
-	childCancel()
+	wg.Add(1)                  // увеличивает счётчик WaitGroup на 1
+	go postman(&wg, "газету")
 
-	time.Sleep(1*time.Second)
-	parentCancel()
-	
-	time.Sleep(3*time.Second)
+	wg.Add(1)
+	go postman(&wg, "журнал")
+
+	wg.Add(1)
+	go postman(&wg, "письмо")
+
+	wg.Wait()  //БЛОКИРУЕТ выполнение main. Ожидает, пока счётчик WaitGroup не станет равен 0
+
 	fmt.Println("Main the end")
+
 }
