@@ -3,34 +3,44 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
+	// "sync/atomic"
 )
 
-func postman(wg *sync.WaitGroup, text string) { // wg нужен для синхронизации горутин с main
-	defer wg.Done()  // выполнится ПЕРЕД выходом из функции
+// var number int = 0  // 10000
+// var number atomic.Int64
+var slice []int
 
-	for i := 1; i <= 3; i++{
-		fmt.Println("Я отнёс", text, "в", i, "раз")
-		time.Sleep(200*time.Millisecond)
+var mtx sync.Mutex  // sync.Mutex - взаимное исключение (mutual exclusion)
+
+func increment(wg *sync.WaitGroup){
+	defer wg.Done()
+	
+	for i := 1; i <= 1000; i++{
+		// number.Add(1)
+		mtx.Lock()                //блокирует мьютекс
+		slice = append(slice, i)
+		mtx.Unlock()             // разблокирует мьютекс. Позволяет другой ожидающей горутине войти в критическую секцию	
 	}	
 }
 
-
 func main() {
+	wg := &sync.WaitGroup{}
 
-	wg := sync.WaitGroup{}   // Создаём WaitGroup (счётчик синхронизации)
+	wg.Add(10)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
+	go increment(wg)
 
-	wg.Add(1)                  // увеличивает счётчик WaitGroup на 1
-	go postman(&wg, "газету")
+	wg.Wait()
 
-	wg.Add(1)
-	go postman(&wg, "журнал")
-
-	wg.Add(1)
-	go postman(&wg, "письмо")
-
-	wg.Wait()  //БЛОКИРУЕТ выполнение main. Ожидает, пока счётчик WaitGroup не станет равен 0
-
-	fmt.Println("Main the end")
+	// fmt.Println("Main the end", number.Load())	
+	fmt.Println("Main the end", len(slice))	
 
 }
