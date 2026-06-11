@@ -1,54 +1,56 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"sync"
+	"study/miner"
+	"study/postman"
 	"time"
 )
 
-var likes int = 0
-var mtx sync.RWMutex
-
-func setLike(wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	for i:=1; i<=100_000; i++{
-		mtx.Lock()
-		likes++
-		mtx.Unlock()
-	}	
-}
-
-func getLike(wg *sync.WaitGroup) {
-	defer wg.Done()
-	for i:=1; i<=100_000; i++{
-		mtx.RLock() // блокировка для ЧТЕНИЯ (read lock).RLock позволяет параллельное чтение множеству горутин
-					// Блокируется только если кто-то пишет (владеет Lock())
-					// Если другие горутины только читают - RLock не блокирует
-		_ = likes
-		mtx.RUnlock()
-	}
-}
 
 func main() {
+	var tasks int
+	var mails []string
 
-	wg := &sync.WaitGroup{}
+	minerContext, minerCancel := context.WithCancel(context.Background())
+	postmanContext, postmanCancel := context.WithCancel(context.Background())
 
-	initTime := time.Now()
+	go func() {
+		time.Sleep(3*time.Second)
+		minerCancel()
+		fmt.Println("The ---> personnel's <--- working day is legal !!!!")
+	}()
+	go func() {
+		time.Sleep(6*time.Second)
+		postmanCancel()
+		fmt.Println("The ---> postman's <--- working day is legal !!!!!!!!")
+	}()
 
-	for i := 1; i <= 10; i++{
-		wg.Add(1)
-		go setLike(wg)
+	coalTransferPoint := miner.MinerPool(minerContext, 2)
+	mailTransferPoint := postman.PostmanPool(postmanContext, 2)
+
+	isCoalClosed := false
+	isMailClosed := false
+
+	for !isCoalClosed || !isMailClosed{
+		select {		
+		case c, ok := <- coalTransferPoint:
+			if !ok {
+				isCoalClosed = true
+				continue
+			}
+			tasks += c
+		case m, ok := <- mailTransferPoint:
+			if !ok {
+				isMailClosed = true
+				continue
+			}
+			mails = append(mails, m)
+		}
 	}
-
-	for i := 1; i <= 10; i++{
-		wg.Add(1)
-		go getLike(wg)
-	}
-
-	wg.Wait()
-
-	fmt.Println("Время выполнения:", time.Since(initTime))
-	 
+	
+	fmt.Println("Number of tasks:", tasks)
+	fmt.Println("Number of emails received:", tasks)
 
 }
