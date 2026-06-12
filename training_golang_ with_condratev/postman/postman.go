@@ -7,7 +7,13 @@ import (
 	"time"
 )
 
-func Postman(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- string, n int, mail string) {
+func Postman(
+	ctx context.Context,
+	wg *sync.WaitGroup,
+	transferPoint chan<- string,
+	n int,
+	mail string,
+) {
 
 	defer wg.Done()
 
@@ -28,12 +34,12 @@ func Postman(ctx context.Context, wg *sync.WaitGroup, transferPoint chan<- strin
 	
 }
 
-func PostmanPool(ctx context.Context, PostmanCount int) <-chan string{
+func PostmanPool(ctx context.Context, postmanCount int) <-chan string{
 	mailTransferPoint := make(chan string)
 
 	wg := &sync.WaitGroup{}
 
-	for i:=1 ; i<=PostmanCount; i++ {
+	for i:=1 ; i<=postmanCount; i++ {
 		wg.Add(1)
 		go Postman(ctx, wg, mailTransferPoint, i, postmanToMail(i))
 	}

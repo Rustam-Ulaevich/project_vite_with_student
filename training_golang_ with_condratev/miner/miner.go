@@ -12,7 +12,8 @@ func Miner(
 	wg *sync.WaitGroup,
 	transferPoint chan<- int,
 	n int,
-	power int) {
+	power int,
+) {
 		defer wg.Done()
 
 	for {
