@@ -2,56 +2,73 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
-	"time"
+	"strconv"
+	"sync/atomic"
 )
 
+var money = atomic.Int64{}  // usd
+var bank = atomic.Int64{}
+
 func payHandler(w http.ResponseWriter, r *http.Request){
-	str := "Pay order"
-	b := []byte(str)
 
-	_, err := w.Write(b)
+	httpRequestBody, err := io.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println("An error occurred while recording the HTTP response:", err.Error())
-	}else{
-		fmt.Println("Pay was processed correctly")
+		fmt.Println("Fail to read HTTP body:", err)
+		return
 	}
+
+	paymentAmount, err := strconv.Atoi(string(httpRequestBody))
+	if err != nil {
+		fmt.Println("error convert value:", err)
+		return
+	}
+
+	if money.Load() - int64(paymentAmount) >= 0 {
+		money.Add(int64(-paymentAmount))
+		fmt.Println("The payment was successful!", money.Load())
+	}else {
+		fmt.Println("Not enough money to pay")
+	}
+
+	
 }
 
-func cancelHandler(w http.ResponseWriter, r *http.Request){
-	time.Sleep(3*time.Second)
-	str := "Cansel pay"
-	b := []byte(str)
-
-	_, err := w.Write(b)
+func saveHandler(w http.ResponseWriter, r *http.Request){
+	httpRequestBody, err := io.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println("An error occurred while recording the HTTP response:", err.Error())
+		fmt.Println("Fail to read http request body:", err)
+		return
+	}
+
+	saveAmount, err := strconv.Atoi(string(httpRequestBody))
+	if err != nil {
+		fmt.Println("Fail to convert http body to integer:", err)
+		return
+	}
+
+	if int64(saveAmount) <= money.Load() && int64(saveAmount) > 0 {
+		money.Add(int64(-saveAmount))
+		bank.Add(int64(saveAmount))
+
+		fmt.Println("Money:", money.Load(), "Bank:", bank.Load())
 	}else{
-		fmt.Println("Cansel pay was processed correctly")
+		fmt.Println("Not enough money to put in bank")
 	}
-}
 
-func handler(w http.ResponseWriter, r *http.Request){
-	str := "Hello world"
-	b := []byte(str)
-
-	_, err := w.Write(b)
-	if err != nil {
-		fmt.Println("An error occurred while recording the HTTP response:", err.Error())
-	} else {
-		fmt.Println("HTTP request was processed correctly")
-	}
 }
 
 func main() {
-	http.HandleFunc("/default", handler)
-	http.HandleFunc("/pay", payHandler)
-	http.HandleFunc("/cancel", cancelHandler)
 
-	fmt.Println("Start HTTP server")
+	money.Add(1000)
+
+	http.HandleFunc("/pay", payHandler)
+	http.HandleFunc("/save", saveHandler)
+
 	err := http.ListenAndServe(":9091", nil)
-	if err !=nil {
-		fmt.Println("An error has occurred:", err.Error())
+	if err != nil {
+		fmt.Println("HTTP server error:", err)
 	}
-	fmt.Println("Finish HTTP server")
+
 }
