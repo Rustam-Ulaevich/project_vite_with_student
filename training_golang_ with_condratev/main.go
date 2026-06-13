@@ -7,32 +7,47 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
-	"time"
 )
 
 var mtx = sync.Mutex{}
 var money = atomic.Int64{}  // usd
 var bank = atomic.Int64{}
 
-func payHandler(w http.ResponseWriter, r *http.Request){
-
+func payHandler(w http.ResponseWriter, r *http.Request){	
+	
 	httpRequestBody, err := io.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println("Fail to read HTTP body:", err)
+
+		msg := "Fail to read HTTP body:" + err.Error()
+		fmt.Println(msg)
+
+		_, err := w.Write([]byte(msg))
+		if err != nil{
+			fmt.Println("fail to write HTTP response:", err)
+		}
 		return
 	}
 
 	paymentAmount, err := strconv.Atoi(string(httpRequestBody))
 	if err != nil {
-		fmt.Println("error convert value:", err)
+		msg := "error convert value:" + err.Error()
+		fmt.Println(msg)
+		_, err := w.Write([]byte(msg))
+		if err != nil {
+			fmt.Println("fail to write HTTP response:", err)
+		}
 		return
 	}
 
 	mtx.Lock()
 	if money.Load() - int64(paymentAmount) >= 0 {
-		time.Sleep(3*time.Second)
 		money.Add(int64(-paymentAmount))
-		fmt.Println("The payment was successful!", money.Load())
+		msg := "The payment was successful!" + strconv.Itoa(int(money.Load()))
+		fmt.Println(msg)
+		_, err := w.Write([]byte(msg))
+		if err != nil{
+			fmt.Println("fail to write HTTP response:", err)
+		}
 	}else {
 		fmt.Println("Not enough money to pay")
 	}
@@ -41,15 +56,28 @@ func payHandler(w http.ResponseWriter, r *http.Request){
 }
 
 func saveHandler(w http.ResponseWriter, r *http.Request){
+
+
 	httpRequestBody, err := io.ReadAll(r.Body)
 	if err != nil {
-		fmt.Println("Fail to read http request body:", err)
+		msg := "Fail to read http request body: " + string(err.Error())
+		_, err := w.Write([]byte(msg))
+		if err != nil{
+			fmt.Println("fail to write HTTP response: ", err)
+		}
+
+		fmt.Println(msg)
 		return
 	}
 
 	saveAmount, err := strconv.Atoi(string(httpRequestBody))
 	if err != nil {
-		fmt.Println("Fail to convert http body to integer:", err)
+		msg := "Fail to convert http body to integer: " + string(err.Error())
+		_, err := w.Write([]byte(msg))
+		if err != nil{
+			fmt.Println("fail to write HTTp response: ", err)
+		}
+		fmt.Println(msg)
 		return
 	}
 
@@ -57,9 +85,16 @@ func saveHandler(w http.ResponseWriter, r *http.Request){
 	if int64(saveAmount) <= money.Load() && int64(saveAmount) > 0 {
 		money.Add(int64(-saveAmount))
 		bank.Add(int64(saveAmount))
-		fmt.Println("Money:", money.Load(), "Bank:", bank.Load())
+		msg := "Money: "+ strconv.Itoa(int(money.Load())) + " Bank: " + strconv.Itoa(int(bank.Load()))
+		_, err := w.Write([]byte(msg))
+		if err != nil {
+			fmt.Println("fail to write HTTP response:", err)		}
+		
+		fmt.Println(msg)
 	}else if int64(saveAmount) < 0{
-		fmt.Println("You need promblem??? You CHEATER!!!")
+		msg := "You need promblem??? You CHEATER!!!"
+		fmt.Println(msg)
+		w.Write([]byte(msg))
 	}else{
 		fmt.Println("Not enough money to put in bank")
 	}
