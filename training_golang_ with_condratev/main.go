@@ -1,6 +1,6 @@
 package main
 
-import (
+import ( 
 	"fmt"
 	"io"
 	"net/http"
@@ -13,10 +13,22 @@ var mtx = sync.Mutex{}
 var money = atomic.Int64{}  // usd
 var bank = atomic.Int64{}
 
-func payHandler(w http.ResponseWriter, r *http.Request){	
+func payHandler(w http.ResponseWriter, r *http.Request){
+	if r.Method != http.MethodPatch {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	fmt.Println("HTTP method: ", r.Method)
+
+	for k, v := range r.Header{
+		fmt.Println("k: ", k, "--v: ", v)
+	}
 	
 	httpRequestBody, err := io.ReadAll(r.Body)
 	if err != nil {
+
+		w.WriteHeader(http.StatusInternalServerError)
 
 		msg := "Fail to read HTTP body:" + err.Error()
 		fmt.Println(msg)
@@ -30,6 +42,8 @@ func payHandler(w http.ResponseWriter, r *http.Request){
 
 	paymentAmount, err := strconv.Atoi(string(httpRequestBody))
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+
 		msg := "error convert value:" + err.Error()
 		fmt.Println(msg)
 		_, err := w.Write([]byte(msg))
@@ -42,7 +56,7 @@ func payHandler(w http.ResponseWriter, r *http.Request){
 	mtx.Lock()
 	if money.Load() - int64(paymentAmount) >= 0 {
 		money.Add(int64(-paymentAmount))
-		msg := "The payment was successful!" + strconv.Itoa(int(money.Load()))
+		msg := "The payment was successful! " + strconv.Itoa(int(money.Load()))
 		fmt.Println(msg)
 		_, err := w.Write([]byte(msg))
 		if err != nil{
@@ -57,6 +71,16 @@ func payHandler(w http.ResponseWriter, r *http.Request){
 
 func saveHandler(w http.ResponseWriter, r *http.Request){
 
+	if r.Method != http.MethodPut {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	fmt.Println("HTTP method: ", r.Method)
+
+	for k, v := range r.Header{
+		fmt.Println("k: ", k, "--v: ", v)
+	}
 
 	httpRequestBody, err := io.ReadAll(r.Body)
 	if err != nil {
