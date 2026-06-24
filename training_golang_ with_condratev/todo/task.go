@@ -5,26 +5,26 @@ import "time"
 type Task struct {
 	Title       string
 	Description string
-	IsDone      bool
+	Completed      bool
 
 	CreatedAt time.Time
-	DoneAt *time.Time
+	CompletedAt *time.Time
 }
 
 func NewTask(title string, decription string) Task {
 	return Task{
 		Title: title,
 		Description: decription,
-		IsDone: false,
+		Completed: false,
 
 		CreatedAt: time.Now(),
-		DoneAt: nil,
+		CompletedAt: nil,
 	}
 }
 
-func (t *Task) Done() {
-	doneTime := time.Now()
+func (t *Task) Complete() {
+	completeTime := time.Now()
 
-	t.IsDone = true
-	t.DoneAt = &doneTime
+	t.Completed = true
+	t.CompletedAt = &completeTime
 }

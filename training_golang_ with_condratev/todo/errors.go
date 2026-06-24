@@ -1,3 +1,6 @@
 package todo
 
-var taskNotFound string  = "задача не найдена"
+import "errors"
+
+var ErrTaskNotFound = errors.New("Task not found")
+var ErrTaskAlreadyExists = errors.New("Task already found")
