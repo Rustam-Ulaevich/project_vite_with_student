@@ -2,6 +2,7 @@ package http
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"restapi/todo"
 	"time"
@@ -37,6 +38,33 @@ func (h *HTTPHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 		}
 
 		http.Error(w, errDTO.ToString(), http.StatusBadRequest)
+	}
+
+	todoTask := todo.NewTask(taskDTO.Title, taskDTO.Description)
+	if err := h.todoList.AddTask(); err != nil {
+		errDTO := ErrorDTO{
+			Message: err.Error(),
+			Time: time.Now(),
+		}
+
+		if errors.Is(err, todo.ErrTaskAlreadyExists) {
+			http.Error(w, errDTO.ToString(), http.StatusConflict)
+		} else {
+			http.Error(w, errDTO.ToString(), http.StatusInternalServerError)
+		}
+
+		return
+	}
+
+	b, json.MarshalIndent(todoTask, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	if _, err := w.Write(b); err != nil {
+		fmt.Println("Failed to write http response:", err)
+		return
 	}
 
 }
