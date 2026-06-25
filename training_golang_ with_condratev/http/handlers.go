@@ -3,6 +3,7 @@ package http
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"restapi/todo"
 	"time"
@@ -56,7 +57,7 @@ func (h *HTTPHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	b, json.MarshalIndent(todoTask, "", "    ")
+	b, err := json.MarshalIndent(todoTask, "", "    ")
 	if err != nil {
 		panic(err)
 	}
