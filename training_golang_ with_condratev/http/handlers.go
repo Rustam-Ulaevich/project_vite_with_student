@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"restapi/todo"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 type HTTPHandlers struct {
@@ -71,6 +73,23 @@ func (h *HTTPHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *HTTPHandlers) HandleGetTask(w http.ResponseWriter, r *http.Request) {
+	title := mux.Vars(r)["title"]
+
+	task, err := h.todolist.GetTask(title)
+	if err != nil {
+		errDTO := ErrorDTO{
+			Message: err.Error(),
+			Time: 	 time.Now(),
+		}
+
+		if errors.Is(err, todo.ErrTaskNotFound) {
+			http.Error(w, errDTO.ToString(), http.StatusNotFound)
+		}else{
+			http.Error(w, errDTO.ToString(), http.StatusInternalServerError)
+		}
+
+		return
+	}
 
 }
 
