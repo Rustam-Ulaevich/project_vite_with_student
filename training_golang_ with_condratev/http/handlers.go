@@ -41,6 +41,7 @@ func (h *HTTPHandlers) HandleCreateTask(w http.ResponseWriter, r *http.Request) 
 		}
 
 		http.Error(w, errDTO.ToString(), http.StatusBadRequest)
+		return
 	}
 
 	todoTask := todo.NewTask(taskDTO.Title, taskDTO.Description)
@@ -91,9 +92,31 @@ func (h *HTTPHandlers) HandleGetTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	b, err := json.MarshalIndent(task, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+
+	w.WriteHeader(http.StatusOk)
+	if_, err := w.Write(b); err != nil {
+		fmt.Println("Failed to write http response:", err)
+		return
+	}
+
 }
 
 func (h *HTTPHandlers) HandleGetAllTasks(w http.ResponseWriter, r *http.Request) {
+	tasks := h.todolist.ListTasks()
+	b, err := json.MarshalIndent(tasks, "", "    ")
+	if, err != nil {
+		panic(err)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if _, err := w.Write(b); err != nil {
+		fmt.Println("failed to write http response:", err)
+		return
+	}
 
 }
 
